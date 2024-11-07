@@ -3,38 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5-in-a-Row Tic Tac Toe (50x50)</title>
+  <title>TIC TAC TOE</title>
   <style>
-    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #6E7B8A, #B2BEC3);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6DD5FA, #2980B9); /* Gradient background */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      color: #333;
+      padding: 20px;
+      overflow: auto;
+      color: #fff; 
     }
 
     h1 {
-      font-size: 2rem;
-      color: #fff;
+      font-size: 2.5rem;
       margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
 
-    /* Board Styles */
     .board {
       display: grid;
-      grid-template-columns: repeat(50, 20px);
-      grid-gap: 2px;
-      margin: 20px auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      grid-template-columns: repeat(100, 20px);
+      grid-gap: 1px;
+      margin: 20px 0;
+      max-width: 100%;
+      overflow: auto;
+      border: 2px solid #ddd;
+      border-radius: 8px;
       background-color: #fff;
+      width: 100%; 
     }
 
     .cell {
@@ -43,71 +50,108 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2em;
-      background-color: #fafafa;
-      border: 1px solid #ddd;
+      font-size: 1.1rem;
+      background-color: #fff;
+      border: 1px solid #ccc;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
+      transition: background-color 0.3s ease, transform 0.1s ease;
       border-radius: 4px;
     }
 
     .cell:hover {
-      background-color: #f0f0f0;
-      transform: scale(1.05);
+      background-color: #f1f1f1;
+      transform: scale(1.1);
     }
 
+   
     .cell.X {
-      color: #e74c3c;
+      color: #2196F3; 
       font-weight: bold;
     }
 
     .cell.O {
-      color: #3498db;
+      color: #F44336; 
       font-weight: bold;
     }
 
-    /* Message and Status */
     .message {
       margin-top: 20px;
-      font-size: 1.4rem;
-      color: #fff;
+      font-size: 1.5rem;
       text-align: center;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    /* Restart Button */
-    .restart {
+    /* Button Styles */
+    .button-container {
+      display: flex;
+      gap: 15px;
       margin-top: 30px;
-      padding: 15px 30px;
+    }
+
+    .restart, .undo {
+      padding: 12px 25px;
       font-size: 1rem;
-      background-color: #4CAF50;
+      background: linear-gradient(45deg, #333d34, #5a6e5d);
       color: white;
       border: none;
-      border-radius: 50px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .restart:hover {
-      background-color: #45a049;
+    .restart:hover, .undo:hover {
+      background: linear-gradient(45deg, #e8f1e9, #9bb69c);
       transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .restart:focus {
-      outline: none;
+    .undo:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
     }
 
-    /* Responsive Board */
+    ::-webkit-scrollbar {
+      width: 12px; 
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
     @media (max-width: 768px) {
       .board {
         grid-template-columns: repeat(20, 20px);
+        max-width: 100%;
       }
-    }
 
-    @media (max-width: 480px) {
-      .board {
-        grid-template-columns: repeat(10, 20px);
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .message {
+        font-size: 1.3rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .restart, .undo {
+        font-size: 0.9rem;
+        padding: 10px 20px;
       }
     }
 
@@ -115,22 +159,26 @@
 </head>
 <body>
 
-  <h1>5-in-a-Row Tic Tac Toe (50x50)</h1>
+  <h1>TIC TAC TOE</h1>
   <div class="board" id="board"></div>
   <div class="message" id="message"></div>
-  <button class="restart" onclick="resetGame()">Restart Game</button>
+  <div class="button-container">
+    <button class="undo" onclick="undoMove()" disabled>Undo Move</button>
+    <button class="restart" onclick="resetGame()">Restart Game</button>
+  </div>
 
   <script>
-    const boardSize = 50;
+    const boardSize = 100; 
     const winLength = 5;
     let currentPlayer = "X";
     let gameActive = true;
     let boardState = Array(boardSize * boardSize).fill(null);
-
+    let moveHistory = []; 
+    
     const board = document.getElementById("board");
     const message = document.getElementById("message");
+    const undoButton = document.querySelector(".undo");
 
-    // Initialize the game board with cells
     function createBoard() {
       board.innerHTML = '';
       for (let i = 0; i < boardSize * boardSize; i++) {
@@ -142,7 +190,6 @@
       }
     }
 
-    // Handle cell click
     function handleCellClick(event) {
       const cell = event.target;
       const cellIndex = cell.dataset.index;
@@ -150,7 +197,9 @@
       if (boardState[cellIndex] || !gameActive) return;
 
       boardState[cellIndex] = currentPlayer;
+      moveHistory.push(cellIndex); 
       cell.textContent = currentPlayer;
+
       cell.classList.add(currentPlayer);
 
       if (checkWin(cellIndex)) {
@@ -163,9 +212,10 @@
         currentPlayer = currentPlayer === "X" ? "O" : "X";
         message.textContent = `Player ${currentPlayer}'s turn`;
       }
+      
+      undoButton.disabled = false; 
     }
 
-    // Check if there's a win condition
     function checkWin(index) {
       const row = Math.floor(index / boardSize);
       const col = index % boardSize;
@@ -178,19 +228,15 @@
       );
     }
 
-    // Check a specific direction for a win
     function checkDirection(row, col, rowDir, colDir) {
       let count = 1;
 
-      // Check in the positive direction
       count += countConsecutive(row, col, rowDir, colDir);
-      // Check in the negative direction
       count += countConsecutive(row, col, -rowDir, -colDir);
 
       return count >= winLength;
     }
 
-    // Count consecutive cells in a specific direction
     function countConsecutive(row, col, rowDir, colDir) {
       let r = row + rowDir;
       let c = col + colDir;
@@ -205,16 +251,33 @@
       return count;
     }
 
-    // Reset the game
+    function undoMove() {
+      if (moveHistory.length === 0 || !gameActive) return;
+
+      const lastMoveIndex = moveHistory.pop(); 
+      boardState[lastMoveIndex] = null; 
+      const lastCell = board.children[lastMoveIndex];
+      lastCell.textContent = ''; 
+      lastCell.classList.remove("X", "O"); 
+
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+      message.textContent = `Player ${currentPlayer}'s turn`;
+
+      if (moveHistory.length === 0) {
+        undoButton.disabled = true; 
+      }
+    }
+
     function resetGame() {
       boardState = Array(boardSize * boardSize).fill(null);
+      moveHistory = []; 
       currentPlayer = "X";
       gameActive = true;
       message.textContent = `Player ${currentPlayer}'s turn`;
+      undoButton.disabled = true; 
       createBoard();
     }
 
-    // Initialize the game
     createBoard();
     message.textContent = `Player ${currentPlayer}'s turn`;
 
